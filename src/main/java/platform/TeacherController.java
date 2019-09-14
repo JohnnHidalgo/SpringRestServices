@@ -1,4 +1,5 @@
 package platform;
+
 import java.util.List;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -8,54 +9,49 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-
-@RestController
-class TeacherController {
-
+public class TeacherController {
     private final TeacherRepository repository;
-
     TeacherController(TeacherRepository repository) {
         this.repository = repository;
     }
 
     // Aggregate root
 
-    @GetMapping("/teachers")
+    @GetMapping("/teacher")
     List<Teacher> all() {
         return repository.findAll();
     }
 
-    @PostMapping("/teachers")
-    Teacher newEmployee(@RequestBody Teacher newTeacher) {
+    @PostMapping("/teacher")
+    Teacher newTeacher(@RequestBody Teacher newTeacher) {
         return repository.save(newTeacher);
     }
 
     // Single item
 
-    @GetMapping("/teachers/{id}")
+    @GetMapping("/teacher/{id}")
     Teacher one(@PathVariable Long id) {
 
         return repository.findById(id)
                 .orElseThrow(() -> new TeacherNotFoundException(id));
     }
-
-    @PutMapping("/teachers/{id}")
+    @PutMapping("/teacher/{id}")
     Teacher replaceTeacher(@RequestBody Teacher newTeacher, @PathVariable Long id) {
 
         return repository.findById(id)
-                .map(teacher -> {
-                    teacher.setName(newTeacher.getName());
-                    teacher.setCourse(newTeacher.getCourse());
-                    return repository.save(teacher);
+                .map(employee -> {
+                    employee.setName(newTeacher.getName());
+                    employee.setCourse(newTeacher.getCourse());
+                    return repository.save(employee);
                 })
                 .orElseGet(() -> {
                     newTeacher.setId(id);
                     return repository.save(newTeacher);
                 });
     }
-
-    @DeleteMapping("/teachers/{id}")
+    @DeleteMapping("/teacher/{id}")
     void deleteTeacher(@PathVariable Long id) {
         repository.deleteById(id);
     }
+
 }

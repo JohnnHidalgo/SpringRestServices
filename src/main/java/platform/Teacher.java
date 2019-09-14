@@ -7,15 +7,15 @@ import javax.persistence.Id;
 
 @Data
 @Entity
-public class Teacher {
+class Teacher {
+
     private @Id @GeneratedValue Long id;
     private String name;
     private String course;
 
-    public Teacher() {
-    }
+    Teacher() {}
 
-    public Teacher(String name, String course) {
+    Teacher(String name, String course) {
         this.name = name;
         this.course = course;
     }
